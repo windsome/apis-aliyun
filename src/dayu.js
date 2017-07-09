@@ -4,6 +4,9 @@ import Base from './base';
 import moment from 'moment';
 import _ from 'lodash';
 import crypto from 'crypto';
+const uuidv4 = require('uuid/v4');
+import hmacSHA1 from 'crypto-js/hmac-sha1';
+import Base64 from 'crypto-js/enc-base64';
 
 /*
 参考地址： https://help.aliyun.com/document_detail/56189.html?spm=5176.doc55288.6.562.VcuXTY
@@ -71,9 +74,23 @@ export default class Dayu extends Base {
            Message 	String 	请求成功 	状态码的描述
            BizId 	String 	134523^4351232 	发送回执ID,可根据该ID查询具体的发送状态
          */
-        let timestamp = moment().format ("YYYY-MM-DD HH:mm:ss");
-        let commonArgs = { Action:'SendSms', Format: 'json', AccessKeyId: this.accessKeyId, SignatureMethod: 'HMAC-SHA1', Timestamp: timestamp };
-        let nArgs = { ...args,  };
+        let timestamp = moment().utc().format ("YYYY-MM-DD HH:mm:ss");
+        let nArgs = { 
+            Format: 'JSON', 
+            SignName: args.SignName,
+            SignatureMethod: 'HMAC-SHA1', 
+            TemplateCode: args.TemplateCode,
+            Timestamp: timestamp,
+            TemplateParam: args.TemplateParam,
+            OutId: args.OutId,
+            AccessKeyId: this.accessKeyId, 
+            Action:'SendSms', 
+            RegionId:'cn-hangzhou', 
+            SignatureNonce: uuidv4(),
+            PhoneNumbers: args.PhoneNumbers,
+            Version:'2017-05-25',
+            SignatureVersion: '1.0',
+        };
         let arr = Object.keys(nArgs).sort();
         // update nArgs if exist object.
         arr.map(key => {
@@ -83,29 +100,41 @@ export default class Dayu extends Base {
         });
         
         let strToSign = arr.map(key => {
-            return encodeURIComponent(key +"="+ nArgs[key]);
+            //return encodeURIComponent(key +"="+ nArgs[key]);
+            return encodeURIComponent(key) +"="+ encodeURIComponent(nArgs[key]);
         }).join('&');
-        strToSign = "GET&%2F&"+strToSign;
+        strToSign = "GET&%2F&"+encodeURIComponent(strToSign);
 
         let accessKeySecret = this.accessKeySecret+"&";
+        const hmacDigest = Base64.stringify(hmacSHA1(strToSign, accessKeySecret));
         let signature = crypto.createHmac('sha1', accessKeySecret).update(strToSign).digest().toString('base64'); //base64
+        debug ("crypto-js:", hmacDigest, ", crypto:", signature, ", accessKeySecret:", accessKeySecret);
         nArgs.Signature = signature;
         arr = Object.keys(nArgs).sort();
         let strQuery = arr.map(key => {
+            //return key +"="+ nArgs[key];
             return key +"="+ encodeURIComponent(nArgs[key]);
         }).join('&');
-        debug ("args=", nArgs, ", query="+strQuery);
+        debug ("args=", nArgs, ", strQuery="+strQuery+", strToSign="+strToSign);
         
         //this._restUrl = 'http://gw.api.taobao.com/router/rest';
-        return this.get ("http://ecs.aliyuncs.com/?"+strQuery)
+
+        //return this.get ("http://ecs.aliyuncs.com/?"+strQuery)
+        return this.get ("http://dysmsapi.aliyuncs.com/?"+strQuery)
             .then (retobj => {
                 debug ("sendSMS result:", retobj);
                 return retobj;
             })
     }
 
-    sendSMSCode (phone, code, outId) {
-        return this.sendSMS ({PhoneNumber: phone, SignName:'帝利文化', TemplateCode:"SMS_76425078", TemplateParam:{code}, OutId: outId });
+    sendSMSCode (phone, number, outId) {
+        return this.sendSMS ({
+            SignName:'帝利文化', 
+            PhoneNumbers: phone, 
+            TemplateCode:"SMS_76425078", 
+            TemplateParam:{number}, 
+            OutId: outId
+        });
     }
 }
 

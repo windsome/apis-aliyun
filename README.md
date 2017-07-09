@@ -44,3 +44,50 @@ The MIT license.
 
 ## Contributors
 
+## 备注
+1. 错误 `InvalidTimeStamp.Expired`，原因为时区问题，Timestamp应该用0时区。
+```
+错误返回：
+{
+  Message: 'Specified time stamp or date value is expired.',
+  RequestId: 'E6CAD98D-E5DD-486B-BE35-9A32AE001666',
+  HostId: 'dysmsapi.aliyuncs.com',
+  Code: 'InvalidTimeStamp.Expired' 
+}
+
+修改：
+    let timestamp = moment().format ("YYYY-MM-DD HH:mm:ss");
+为：
+    let timestamp = moment().utc().format ("YYYY-MM-DD HH:mm:ss");
+```
+2. 错误 `SignatureDoesNotMatch`
+```
+错误返回：
+{
+  Message: 'Specified signature is not matched with our calculation.',
+  RequestId: 'ABAD35BD-CBF6-4EF4-9D70-98C9DA303646',
+  HostId: 'dysmsapi.aliyuncs.com',
+  Code: 'SignatureDoesNotMatch' 
+}
+修改：
+        let strToSign = arr.map(key => {
+            //return encodeURIComponent(key +"="+ nArgs[key]);
+            return encodeURIComponent(key) +"="+ encodeURIComponent(nArgs[key]);
+        }).join('&');
+*        strToSign = "GET&%2F&"+strToSign;
+为：
+        let strToSign = arr.map(key => {
+            //return encodeURIComponent(key +"="+ nArgs[key]);
+            return encodeURIComponent(key) +"="+ encodeURIComponent(nArgs[key]);
+        }).join('&');
+*        strToSign = "GET&%2F&"+encodeURIComponent(strToSign);
+```
+3. 正确返回
+```
+{
+  Message: 'OK',
+  RequestId: '0DDA1848-A16C-4910-AD37-1E04828F8ECF',
+  BizId: '108638754257^1111626164850',
+  Code: 'OK' 
+}
+```
