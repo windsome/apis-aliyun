@@ -1,11 +1,11 @@
 apis-aliyun [![NPM version](https://badge.fury.io/js/apis-aliyun.png)](http://badge.fury.io/js/apis-aliyun) [![Build Status](https://travis-ci.org/windsome/apis-aliyun.png?branch=master)](https://travis-ci.org/windsome/apis-aliyun) [![Dependencies Status](https://david-dm.org/windsome/apis-aliyun.png)](https://david-dm.org/windsome/apis-aliyun) [![Coverage Status](https://coveralls.io/repos/windsome/apis-aliyun/badge.png)](https://coveralls.io/r/windsome/apis-aliyun)
 ======
 
-获取实时彩票结果的开源API
+调用阿里大于发送短信
 
 ## 功能列表
-+ 重庆时时彩
-+ 其他彩票接口
++ 发送短信接口
++ 其他接口
 
 ## Installation
 
@@ -16,10 +16,9 @@ $ npm install apis-aliyun
 ## Use with koa
 
 ```js
-import Lottery from 'apis-aliyun';
+import Dayu from 'apis-aliyun';
 // init:
-var lottery = new Lottery ();
-lottery.init ();
+var Dayu = new Dayu ();
 
 // get result:
 var result = await lottery.getResultAfterTime (new Date(), 'cqssc');
@@ -29,8 +28,6 @@ debug ('cqssc result:', result);
 备注：token在微信平台的开发者中心申请
 
 ## 数据来源
-+ 重庆时时彩
-   see <http://www.zhcw.com/kj/xndg/cq/ssc/>
 
 ## Show cases
 ### 艺术品挖宝 <http://mp.zdili.com>
