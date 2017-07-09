@@ -5,8 +5,8 @@ import moment from 'moment';
 import _ from 'lodash';
 import crypto from 'crypto';
 const uuidv4 = require('uuid/v4');
-import hmacSHA1 from 'crypto-js/hmac-sha1';
-import Base64 from 'crypto-js/enc-base64';
+//import hmacSHA1 from 'crypto-js/hmac-sha1';
+//import Base64 from 'crypto-js/enc-base64';
 
 /*
 参考地址： https://help.aliyun.com/document_detail/56189.html?spm=5176.doc55288.6.562.VcuXTY
@@ -106,9 +106,9 @@ export default class Dayu extends Base {
         strToSign = "GET&%2F&"+encodeURIComponent(strToSign);
 
         let accessKeySecret = this.accessKeySecret+"&";
-        const hmacDigest = Base64.stringify(hmacSHA1(strToSign, accessKeySecret));
+        //const hmacDigest = Base64.stringify(hmacSHA1(strToSign, accessKeySecret));
         let signature = crypto.createHmac('sha1', accessKeySecret).update(strToSign).digest().toString('base64'); //base64
-        debug ("crypto-js:", hmacDigest, ", crypto:", signature, ", accessKeySecret:", accessKeySecret);
+        //debug ("crypto-js:", hmacDigest, ", crypto:", signature, ", accessKeySecret:", accessKeySecret);
         nArgs.Signature = signature;
         arr = Object.keys(nArgs).sort();
         let strQuery = arr.map(key => {
@@ -117,9 +117,6 @@ export default class Dayu extends Base {
         }).join('&');
         debug ("args=", nArgs, ", strQuery="+strQuery+", strToSign="+strToSign);
         
-        //this._restUrl = 'http://gw.api.taobao.com/router/rest';
-
-        //return this.get ("http://ecs.aliyuncs.com/?"+strQuery)
         return this.get ("http://dysmsapi.aliyuncs.com/?"+strQuery)
             .then (retobj => {
                 debug ("sendSMS result:", retobj);
