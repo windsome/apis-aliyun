@@ -4,7 +4,7 @@ apis-aliyun [![NPM version](https://badge.fury.io/js/apis-aliyun.png)](http://ba
 调用阿里大于发送短信
 
 ## 功能列表
-+ 发送短信接口
++ 发送短信验证码接口
 + 其他接口
 
 ## Installation
@@ -13,21 +13,26 @@ apis-aliyun [![NPM version](https://badge.fury.io/js/apis-aliyun.png)](http://ba
 $ npm install apis-aliyun
 ```
 
-## Use with koa
-
+## Usage
 ```js
 import Dayu from 'apis-aliyun';
 // init:
-var Dayu = new Dayu ();
+var dayu = new Dayu ('<your accessKeyId>', '<your accessKeySecret>');
 
 // get result:
-var result = await lottery.getResultAfterTime (new Date(), 'cqssc');
-debug ('cqssc result:', result);
-
+var result = await dayu.sendSMSCode ('<phone>','<code>','<outId>');
+debug ('result:', result);
 ```
-备注：token在微信平台的开发者中心申请
+备注：一般建议在koa2或node端使用，注意accessKeySecret是私密信息，不能暴露。
 
-## 数据来源
+## 使用方法
+1. 到阿里云平台中找到短信服务，申请接入。
+    阿里大于的短信验证码服务已经并入阿里云，通过阿里云的控制台->产品与服务->短信服务（在D字头中）进入。
+2. 申请短信签名和短信模板
+    直接按照阿里云提示的步骤操作
+3. 等待审核通过。
+4. 找到自己的accessKeyId和accessKeySecret，如果没有则去创建。可以通过右上角，个人信息图标中的accessKeys进去。
+5. 按usage节方法使用
 
 ## Show cases
 ### 艺术品挖宝 <http://mp.zdili.com>
