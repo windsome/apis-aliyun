@@ -1,7 +1,7 @@
 {
   "name": "apis-aliyun",
   "version": "0.0.4",
-  "description": "get lottery result for koa2, made by windsome.feng",
+  "description": "taobao/aliyun api for koa2, made by windsome.feng",
   "main": "index.js",
   "scripts": {
     "build": "npm run build:lib",
@@ -22,9 +22,9 @@
     "url": "git+https://github.com/windsome/apis-aliyun.git"
   },
   "keywords": [
-    "lottery",
-    "重庆时时彩",
-    "彩票接口"
+    "Alidayu",
+    "阿里大于",
+    "阿里大鱼"
   ],
   "author": "windsome.feng",
   "license": "MIT",
