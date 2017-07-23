@@ -17,11 +17,18 @@ $ npm install apis-aliyun
 ```js
 import Dayu from 'apis-aliyun';
 // init:
-var dayu = new Dayu ('<your accessKeyId>', '<your accessKeySecret>');
+var dayu = new Dayu ('<your_accessKeyId>', '<your_accessKeySecret>');
 
 // get result:
-var result = await dayu.sendSMSCode ('<phone>','<code>','<outId>');
+var result = await dayu.sendSMS ({
+    SignName:'帝利文化', 
+    PhoneNumbers: 13661234567, 
+    TemplateCode:"SMS_76425078", 
+    TemplateParam:{number:'123456'}, 
+    OutId: '<111111>'
+});
 debug ('result:', result);
+
 ```
 备注：一般建议在koa2或node端使用，注意accessKeySecret是私密信息，不能暴露。
 
