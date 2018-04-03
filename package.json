@@ -1,6 +1,6 @@
 {
   "name": "apis-aliyun",
-  "version": "0.0.4",
+  "version": "1.0.4",
   "description": "taobao/aliyun api for koa2, made by windsome.feng",
   "main": "index.js",
   "scripts": {
@@ -68,6 +68,6 @@
   },
   "homepage": "https://github.com/windsome/apis-aliyun#readme",
   "directories": {
-    "test": "test"
+    "lib": "lib"
   }
 }

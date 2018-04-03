@@ -9,7 +9,7 @@ apis-aliyun [![NPM version](https://badge.fury.io/js/apis-aliyun.png)](http://ba
 
 ## Installation
 ```sh
-$ npm install apis-aliyun
+$ npm install apis-aliyun --save
 ```
 
 ## Usage
@@ -20,8 +20,8 @@ var dayu = new Dayu ('<your_accessKeyId>', '<your_accessKeySecret>');
 // get result:
 var result = await dayu.sendSMS ({
     SignName:'帝利文化', 
-    PhoneNumbers: 13661234567, 
-    TemplateCode:"SMS_76425078", 
+    PhoneNumbers: '13661234567', 
+    TemplateCode:'SMS_76425078', 
     TemplateParam:{number:'123456'}, 
     OutId: '<111111>'
 });
@@ -29,11 +29,11 @@ debug ('result:', result);
 ```
 备注：一般建议在koa2或node端使用，注意accessKeySecret是私密信息，不能暴露。  
 参数含义：  
-1. SignName，必选，短信签名，一般为企业简称。如：云通信。
-2. PhoneNumbers，必选，短信接收号码。支持以逗号分隔的形式进行批量调用，批量上限为1000个手机号码,批量调用相对于单条调用及时性稍有延迟,验证码类型的短信推荐使用单条调用的方式。如：13661234567
-3. TemplateCode，必选，短信模板ID。可以到阿里云控制台去申请。如：SMS_0000
-4. TemplateParam，可选，短信模板变量替换JSON串,友情提示:如果JSON中需要带换行符,请参照标准的JSON协议要求。如：{“code”:”1234”,”product”:”ytx”}
-5. OutId，可选，外部流水扩展字段，一般忽略此字段。
+1. SignName，必选，字符串类型，短信签名，一般为企业简称。如：云通信。
+2. PhoneNumbers，必选，字符串类型，短信接收号码。支持以逗号分隔的形式进行批量调用，批量上限为1000个手机号码,批量调用相对于单条调用及时性稍有延迟,验证码类型的短信推荐使用单条调用的方式。如：13661234567
+3. TemplateCode，必选，字符串类型，短信模板ID。可以到阿里云控制台去申请。如：SMS_0000
+4. TemplateParam，可选, JSON类型，短信模板变量替换JSON串,友情提示:如果JSON中需要带换行符,请参照标准的JSON协议要求。如：{“code”:”1234”,”product”:”ytx”}
+5. OutId，可选，字符串类型，外部流水扩展字段，一般忽略此字段。
 
 ## 使用方法
 1. 到阿里云平台中找到短信服务，申请接入。
