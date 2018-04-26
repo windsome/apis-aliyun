@@ -65,6 +65,7 @@
     "better-npm-run": "0.0.10",
     "coveralls": "^2.12.0",
     "expect.js": "^0.3.1",
+    "husky": "^0.14.3",
     "koa": "2.0.0-alpha.3",
     "lint-staged": "^4.2.3",
     "mocha": "^3.2.0",
