@@ -1,9 +1,10 @@
 apis-aliyun [![NPM version](https://badge.fury.io/js/apis-aliyun.png)](http://badge.fury.io/js/apis-aliyun) [![Build Status](https://travis-ci.org/windsome/apis-aliyun.png?branch=master)](https://travis-ci.org/windsome/apis-aliyun) [![Dependencies Status](https://david-dm.org/windsome/apis-aliyun.png)](https://david-dm.org/windsome/apis-aliyun) [![Coverage Status](https://coveralls.io/repos/windsome/apis-aliyun/badge.png)](https://coveralls.io/r/windsome/apis-aliyun)
 ======
-
-调用阿里大于发送短信  
+精简版阿里云接口(使用fetch)  
+1. 调用阿里大于发送短信  
 阿里大于管理端：<https://dysms.console.aliyun.com/dysms.htm?spm=5176.2020520153.aliyun_topbar.129.20034945K9sQJK#/overview>  
 阿里大于短信服务文档：<https://help.aliyun.com/product/44282.html?spm=5176.sms-account.102.8.fa111cbep1BX5w>  
+2. sts用于上传视频文件的临时授权
 
 ## 功能列表
 + 发送短信验证码接口
@@ -17,7 +18,7 @@ $ npm install apis-aliyun --save
 ## Usage
 阿里大于短信用法：
 需要import相应的库：`import { dayu } from 'apis-aliyun';`或`import * as dayu from 'apis-aliyun/lib/dayu'`  
-代码参考：<./samples/test_dayu.js>  
+代码参考：[阿里大于短信发送参考代码](./samples/test_dayu.js)
 
 备注：一般建议在koa2或node端使用，注意accessKeySecret是私密信息，不能暴露。  
 参数含义：  
