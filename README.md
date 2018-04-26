@@ -1,7 +1,9 @@
 apis-aliyun [![NPM version](https://badge.fury.io/js/apis-aliyun.png)](http://badge.fury.io/js/apis-aliyun) [![Build Status](https://travis-ci.org/windsome/apis-aliyun.png?branch=master)](https://travis-ci.org/windsome/apis-aliyun) [![Dependencies Status](https://david-dm.org/windsome/apis-aliyun.png)](https://david-dm.org/windsome/apis-aliyun) [![Coverage Status](https://coveralls.io/repos/windsome/apis-aliyun/badge.png)](https://coveralls.io/r/windsome/apis-aliyun)
 ======
 
-调用阿里大于发送短信
+调用阿里大于发送短信  
+阿里大于管理端：<https://dysms.console.aliyun.com/dysms.htm?spm=5176.2020520153.aliyun_topbar.129.20034945K9sQJK#/overview>  
+阿里大于短信服务文档：<https://help.aliyun.com/product/44282.html?spm=5176.sms-account.102.8.fa111cbep1BX5w>  
 
 ## 功能列表
 + 发送短信验证码接口
@@ -14,18 +16,36 @@ $ npm install apis-aliyun --save
 
 ## Usage
 ```js
-import Dayu from 'apis-aliyun';
-// init:
-var dayu = new Dayu ('<your_accessKeyId>', '<your_accessKeySecret>');
-// get result:
-var result = await dayu.sendSMS ({
-    SignName:'帝利文化', 
-    PhoneNumbers: '13661234567', 
-    TemplateCode:'SMS_76425078', 
-    TemplateParam:{number:'123456'}, 
-    OutId: '<111111>'
-});
-debug ('result:', result);
+import { dayu } from 'apis-aliyun';
+// 或 import * as dayu from 'apis-aliyun/lib/dayu'
+
+let AccessKeyId = '<your_accessKeyId>'; // 替换成您自己的AccessKeyId
+let AccessKeySecret = '<your_accessKeySecret>'; // 替换成您自己的AccessKeySecret
+
+// 方法1：promise 方式调用。
+const testSendSms = () => {
+    let result = dayu.SendSms({
+      AccessKeyId,
+      AccessKeySecret,
+      PhoneNumbers: '13661989491',
+      code: '177820',
+      OutId: '<111111>'
+    }).then(result => {
+        console.log ('testSendSms:', result);
+    });
+};
+// 方法2：await/async 方式调用
+const testSendSmsAsync = async () => {
+    let result = await dayu.SendSms({
+      AccessKeyId,
+      AccessKeySecret,
+      PhoneNumbers: '13661989491',
+      code: '177820',
+      OutId: '<111111>'
+    });
+    console.log ('testSendSmsAsync:', result);
+};
+
 ```
 备注：一般建议在koa2或node端使用，注意accessKeySecret是私密信息，不能暴露。  
 参数含义：  

@@ -1,5 +1,9 @@
-import _debug from 'debug';
-const debug = _debug('app:server:apis-aliyun');
+import * as dayu from './dayu';
+import * as sts from './sts';
+import * as vod from './vod';
 
-export AliDayu from './dayu';
-
+export {
+    dayu,
+    sts,
+    vod
+}

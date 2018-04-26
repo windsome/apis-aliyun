@@ -1,13 +1,4 @@
-import _debug from 'debug';
-const debug = _debug('app:server:sendsms');
-import Base from './base';
-import moment from 'moment';
-import _ from 'lodash';
-import crypto from 'crypto';
-const uuidv4 = require('uuid/v4');
-//import hmacSHA1 from 'crypto-js/hmac-sha1';
-//import Base64 from 'crypto-js/enc-base64';
-
+import {_get, _genCommonArgs, _sign} from './_base';
 /*
 参考地址： https://help.aliyun.com/document_detail/56189.html?spm=5176.doc55288.6.562.VcuXTY
 
@@ -52,86 +43,36 @@ PhoneNumbers=13291835394&
 Version=2017-05-25&
 SignatureVersion=1.0
  */
-export default class Dayu extends Base {
-    constructor (accessKeyId, accessKeySecret) {
-        super();
-        this.accessKeyId = accessKeyId;
-        this.accessKeySecret = accessKeySecret;
-    }
-
-    sendSMS (args) {
-        /* 
-           入参：
-           PhoneNumbers 	String 	必须 	15000000000 	短信接收号码。支持以逗号分隔的形式进行批量调用，批量上限为20个手机号码,批量调用相对于单条调用及时性稍有延迟,验证码类型的短信推荐使用单条调用的方式
-           SignName 	String 	必须 	云通信 	短信签名
-           TemplateCode 	String 	必须 	SMS_0000 	短信模板ID
-           TemplateParam 	String 	可选 	{“code”:”1234”,”product”:”ytx”} 	短信模板变量替换JSON串
-           OutId 	String 	可选 	abcdefgh 	外部流水扩展字段
-
-           出参：
-           RequestId 	String 	8906582E-6722 	请求ID
-           Code 	String 	OK 	状态码-返回OK代表请求成功,其他错误码详见错误码列表
-           Message 	String 	请求成功 	状态码的描述
-           BizId 	String 	134523^4351232 	发送回执ID,可根据该ID查询具体的发送状态
-         */
-        let timestamp = moment().utc().format ("YYYY-MM-DD HH:mm:ss");
-        let nArgs = { 
-            Format: 'JSON', 
-            SignName: args.SignName,
-            SignatureMethod: 'HMAC-SHA1', 
-            TemplateCode: args.TemplateCode,
-            Timestamp: timestamp,
-            TemplateParam: args.TemplateParam,
-            OutId: args.OutId,
-            AccessKeyId: this.accessKeyId, 
-            Action:'SendSms', 
-            RegionId:'cn-hangzhou', 
-            SignatureNonce: uuidv4(),
-            PhoneNumbers: args.PhoneNumbers,
-            Version:'2017-05-25',
-            SignatureVersion: '1.0',
-        };
-        let arr = Object.keys(nArgs).sort();
-        // update nArgs if exist object.
-        arr.map(key => {
-            if (typeof nArgs[key] === 'object') {
-                nArgs[key] = JSON.stringify(nArgs[key]);
-            }
-        });
-        
-        let strToSign = arr.map(key => {
-            //return encodeURIComponent(key +"="+ nArgs[key]);
-            return encodeURIComponent(key) +"="+ encodeURIComponent(nArgs[key]);
-        }).join('&');
-        strToSign = "GET&%2F&"+encodeURIComponent(strToSign);
-
-        let accessKeySecret = this.accessKeySecret+"&";
-        //const hmacDigest = Base64.stringify(hmacSHA1(strToSign, accessKeySecret));
-        let signature = crypto.createHmac('sha1', accessKeySecret).update(strToSign).digest().toString('base64'); //base64
-        //debug ("crypto-js:", hmacDigest, ", crypto:", signature, ", accessKeySecret:", accessKeySecret);
-        nArgs.Signature = signature;
-        arr = Object.keys(nArgs).sort();
-        let strQuery = arr.map(key => {
-            //return key +"="+ nArgs[key];
-            return key +"="+ encodeURIComponent(nArgs[key]);
-        }).join('&');
-        debug ("args=", nArgs, ", strQuery="+strQuery+", strToSign="+strToSign);
-        
-        return this.get ("http://dysmsapi.aliyuncs.com/?"+strQuery)
-            .then (retobj => {
-                debug ("sendSMS result:", retobj);
-                return retobj;
-            })
-    }
-
-    sendSMSCode (phone, number, outId) {
-        return this.sendSMS ({
-            SignName:'帝利文化', 
-            PhoneNumbers: phone, 
-            TemplateCode:"SMS_76425078", 
-            TemplateParam:{number}, 
-            OutId: outId
-        });
-    }
-}
-
+/**
+ * 发送短信验证码
+ * @param {object} param0
+ */
+export const SendSms = ({
+    AccessKeyId,
+    AccessKeySecret,
+    PhoneNumbers,
+    code,
+    OutId
+  }) => {
+    let args = _genCommonArgs({
+      Action: 'SendSms',
+      Version: '2017-05-25',
+      AccessKeyId
+    });
+    //let {Version,SignatureVersion, SignatureNonce, ...restArgs} = args;
+    let strQuery = _sign(
+      {
+        ...args,
+        PhoneNumbers,
+        SignName: '帝利文化',
+        TemplateCode: 'SMS_76425078',
+        TemplateParam: { number: code },
+        OutId,
+        RegionId: 'cn-hangzhou'
+      },
+      { AccessKeySecret }
+    );
+    //this._restUrl = 'http://gw.api.taobao.com/router/rest';
+    return _get('http://dysmsapi.aliyuncs.com/?' + strQuery);
+  };
+  
