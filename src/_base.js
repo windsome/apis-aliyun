@@ -105,7 +105,15 @@ export const _sign = (args, { AccessKeySecret }) => {
         AccessKeySecret
     );
   }
-  let nArgs = { ...args };
+
+  let nArgs = {};
+  for (let key in args) {
+    //只遍历对象自身的属性，而不包含继承于原型链上的属性。
+    if (args.hasOwnProperty(key) && args[key] != null) {
+      nArgs[key] = args[key];
+    }
+  }
+
   let arr = Object.keys(nArgs).sort();
   // update nArgs if exist object.
   arr.map(key => {
