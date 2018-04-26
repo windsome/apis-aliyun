@@ -15,38 +15,10 @@ $ npm install apis-aliyun --save
 ```
 
 ## Usage
-```js
-import { dayu } from 'apis-aliyun';
-// 或 import * as dayu from 'apis-aliyun/lib/dayu'
+阿里大于短信用法：
+需要import相应的库：`import { dayu } from 'apis-aliyun';`或`import * as dayu from 'apis-aliyun/lib/dayu'`  
+代码参考：<./samples/test_dayu.js>  
 
-let AccessKeyId = '<your_accessKeyId>'; // 替换成您自己的AccessKeyId
-let AccessKeySecret = '<your_accessKeySecret>'; // 替换成您自己的AccessKeySecret
-
-// 方法1：promise 方式调用。
-const testSendSms = () => {
-    let result = dayu.SendSms({
-      AccessKeyId,
-      AccessKeySecret,
-      PhoneNumbers: '13661989491',
-      code: '177820',
-      OutId: '<111111>'
-    }).then(result => {
-        console.log ('testSendSms:', result);
-    });
-};
-// 方法2：await/async 方式调用
-const testSendSmsAsync = async () => {
-    let result = await dayu.SendSms({
-      AccessKeyId,
-      AccessKeySecret,
-      PhoneNumbers: '13661989491',
-      code: '177820',
-      OutId: '<111111>'
-    });
-    console.log ('testSendSmsAsync:', result);
-};
-
-```
 备注：一般建议在koa2或node端使用，注意accessKeySecret是私密信息，不能暴露。  
 参数含义：  
 1. SignName，必选，字符串类型，短信签名，一般为企业简称。如：云通信。

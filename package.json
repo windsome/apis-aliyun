@@ -1,6 +1,6 @@
 {
   "name": "apis-aliyun",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "aliyun api for koa2, made by windsome.feng, including alidayu, sts, vod",
   "main": "index.js",
   "lint-staged": {
