@@ -144,4 +144,3 @@ export const _sign = (args, { AccessKeySecret }) => {
   );
   return strQuery;
 };
-

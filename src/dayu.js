@@ -1,4 +1,4 @@
-import {_get, _genCommonArgs, _sign} from './_base';
+import { _get, _genCommonArgs, _sign } from './_base';
 /*
 参考地址： https://help.aliyun.com/document_detail/56189.html?spm=5176.doc55288.6.562.VcuXTY
 
@@ -48,31 +48,30 @@ SignatureVersion=1.0
  * @param {object} param0
  */
 export const SendSms = ({
-    AccessKeyId,
-    AccessKeySecret,
-    PhoneNumbers,
-    code,
-    OutId
-  }) => {
-    let args = _genCommonArgs({
-      Action: 'SendSms',
-      Version: '2017-05-25',
-      AccessKeyId
-    });
-    //let {Version,SignatureVersion, SignatureNonce, ...restArgs} = args;
-    let strQuery = _sign(
-      {
-        ...args,
-        PhoneNumbers,
-        SignName: '帝利文化',
-        TemplateCode: 'SMS_76425078',
-        TemplateParam: { number: code },
-        OutId,
-        RegionId: 'cn-hangzhou'
-      },
-      { AccessKeySecret }
-    );
-    //this._restUrl = 'http://gw.api.taobao.com/router/rest';
-    return _get('http://dysmsapi.aliyuncs.com/?' + strQuery);
-  };
-  
+  AccessKeyId,
+  AccessKeySecret,
+  PhoneNumbers,
+  code,
+  OutId
+}) => {
+  let args = _genCommonArgs({
+    Action: 'SendSms',
+    Version: '2017-05-25',
+    AccessKeyId
+  });
+  //let {Version,SignatureVersion, SignatureNonce, ...restArgs} = args;
+  let strQuery = _sign(
+    {
+      ...args,
+      PhoneNumbers,
+      SignName: '帝利文化',
+      TemplateCode: 'SMS_76425078',
+      TemplateParam: { number: code },
+      OutId,
+      RegionId: 'cn-hangzhou'
+    },
+    { AccessKeySecret }
+  );
+  //this._restUrl = 'http://gw.api.taobao.com/router/rest';
+  return _get('http://dysmsapi.aliyuncs.com/?' + strQuery);
+};
